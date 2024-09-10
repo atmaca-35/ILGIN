@@ -59,36 +59,35 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
     window.addEventListener('hashchange', () => {
-        const hash = decodeURIComponent(window.location.hash.substring(1)); // Decode the hash
-        if (hash) {
-            searchInput.value = hash; // Update search input with the hash
-            updateSearch(hash); // Trigger search logic
-            updateSearchBoxPlaceholder(hash); // Update ghost text
-        } else {
-            // If hash is empty, navigate back to the home page
-            window.location.hash = '';  // Clears the hash
-            resultDiv.classList.add('hidden');  // Hide the result div
-            ghostText.textContent = '';  // Clear ghost text
-            searchInput.value = '';  // Clear the search input
-            searchContainer.classList.remove('error');  // Reset error state
-        }
-    });
+    const hash = decodeURIComponent(window.location.hash.substring(1)); // Decode the hash
+    if (hash) {
+        searchInput.value = hash; // Update search input with the hash
+        updateSearch(hash); // Trigger search logic
+        updateSearchBoxPlaceholder(hash); // Update ghost text
+    } else {
+        // Handle the case when the hash is removed
+        resultDiv.classList.add('hidden');  // Hide the result div
+        ghostText.textContent = '';  // Clear ghost text
+        searchInput.value = '';  // Clear the search input
+        searchContainer.classList.remove('error');  // Reset error state
+    }
+});
 
     searchInput.addEventListener('input', (e) => {
-        const query = e.target.value.trim();
+    const query = e.target.value.trim();
 
-        ghostText.textContent = ''; // Clear ghost text
+    ghostText.textContent = ''; // Clear ghost text
 
-        if (query) {
-            window.location.hash = encodeURIComponent(query); // Update the hash with the query
-        } else {
-            window.location.hash = '';  // If input is cleared, reset hash to home page
-        }
+    if (query) {
+        window.location.hash = encodeURIComponent(query); // Update the hash with the query
+    } else {
+        // If input is cleared, remove the hash entirely from the URL
+        history.replaceState(null, null, ' '); // Removes the hash (#) from the URL
+    }
 
-        updateSearch(query); // Search and ghost text logic
-        updateSearchBoxPlaceholder(query);  // Update ghost text
-    });
-
+    updateSearch(query); // Search and ghost text logic
+    updateSearchBoxPlaceholder(query);  // Update ghost text
+});
 
 
 
